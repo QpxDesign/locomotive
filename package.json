@@ -13,6 +13,7 @@
     "@react-native-community/geolocation": "^3.0.6",
     "@react-navigation/native": "^6.1.6",
     "@react-navigation/native-stack": "^6.9.12",
+    "moment": "^2.29.4",
     "react": "18.2.0",
     "react-native": "0.71.8",
     "react-native-keyboard-listener": "^1.1.0",
@@ -46,5 +47,8 @@
   },
   "jest": {
     "preset": "react-native"
-  }
+  },
+  "bundleDependencies": [
+    "moment"
+  ]
 }

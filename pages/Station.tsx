@@ -18,7 +18,16 @@ export default function Station({route, navigation}) {
   useEffect(() => {
     fetch('https://amtrak-api.marcmap.app/get-trains')
       .then(r => r.json())
-      .then(r2 => setTrainData(r2.data));
+      .then(r2 =>
+        setTrainData(
+          r2.data.filter((i: any) =>
+            i.stations.find(
+              (i2: any) =>
+                i2.code === stationData.code && i2.status === 'Enroute',
+            ),
+          ),
+        ),
+      );
   }, []);
   useEffect(() => {
     const interval = setInterval(() => {
@@ -70,42 +79,34 @@ export default function Station({route, navigation}) {
         </Text>
         <ScrollView>
           {trainData !== undefined ? (
-            trainData
-              .filter((i: any) =>
-                i.stations.find(
-                  (i2: any) =>
-                    i2.code === stationData.code && i2.status === 'Enroute',
-                ),
-              )
-              .map((item: any, index: any) => {
-                return (
-                  <TouchableOpacity
-                    key={index}
-                    onPress={() => {
-                      navigation2.navigate('Stops', {trainStuff: item});
+            trainData.sort().map((item: any, index: any) => {
+              return (
+                <TouchableOpacity
+                  key={index}
+                  onPress={() => {
+                    navigation2.navigate('Stops', {trainStuff: item});
+                  }}>
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      backgroundColor: index % 2 === 0 ? '#d4d4d8' : '#e5e7eb',
+                      paddingHorizontal: 20,
+                      paddingVertical: 10,
+                      borderRadius: 10,
+                      marginBottom: 5,
                     }}>
-                    <View
-                      style={{
-                        flexDirection: 'row',
-                        backgroundColor:
-                          index % 2 === 0 ? '#d4d4d8' : '#e5e7eb',
-                        paddingHorizontal: 20,
-                        paddingVertical: 10,
-                        borderRadius: 10,
-                        marginBottom: 5,
-                      }}>
-                      <Text style={{fontSize: 20}}>
-                        {item.routeName} #{item.trainNum} •{' '}
-                        {formatTime(
-                          item.stations.find(
-                            (i: any) => i.code === stationData.code,
-                          ).schArr,
-                        )}
-                      </Text>
-                    </View>
-                  </TouchableOpacity>
-                );
-              })
+                    <Text style={{fontSize: 20}}>
+                      {item.routeName} #{item.trainNum} •{' '}
+                      {formatTime(
+                        item.stations.find(
+                          (i: any) => i.code === stationData.code,
+                        ).schArr,
+                      )}
+                    </Text>
+                  </View>
+                </TouchableOpacity>
+              );
+            })
           ) : (
             <Text style={{textAlign: 'center', fontSize: 18, color: 'white'}}>
               Loading...
