@@ -54,7 +54,7 @@ export default function Stops({route, navigation}) {
         {trainStuffState.routeName} #{trainStuffState.trainNum}
       </Text>
       <Text style={{fontSize: 18, padding: 10}}>
-        Last Updated: {formatTime(trainStuffState.updatedAt).split('M ')[0]}M
+        Last Updated: {formatTime(trainStuffState.updatedAt).split('M ')[0]}
       </Text>
       <ScrollView
         ref={viewRef}

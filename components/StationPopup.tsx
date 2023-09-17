@@ -16,29 +16,35 @@ export default function StationPopup(props: any) {
           justifyContent: 'space-between',
         }}>
         <Text style={{fontSize: 18, fontWeight: '600', paddingRight: 10}}>
-          {props.stationMetadata.properties.STNNAME}
+          {props.stationMetadata.properties.STNCODE}
         </Text>
 
         <Text style={{fontSize: 18}}>{props.weather + '° F'}</Text>
       </View>
-      <TouchableOpacity
-        style={{zIndex: 9999, justifyContent: 'center'}}
-        onPress={() => {
-          navigation.navigate('Station', {
-            stationData: stationdata.find(
-              x => x.code === props.stationMetadata.properties.STNCODE,
-            ),
-          });
-        }}>
-        <Text
-          style={{
-            fontSize: 16,
-            fontWeight: '400',
-            textDecorationLine: 'underline',
-          }}>
-          Arrivals
+      <View>
+        <Text style={{fontSize: 18}}>
+          {props.stationMetadata.properties.CITY},{' '}
+          {props.stationMetadata.properties.STATE}
         </Text>
-      </TouchableOpacity>
+        <TouchableOpacity
+          style={{zIndex: 9999, justifyContent: 'center'}}
+          onPress={() => {
+            navigation.navigate('Station', {
+              stationData: stationdata.find(
+                x => x.code === props.stationMetadata.properties.STNCODE,
+              ),
+            });
+          }}>
+          <Text
+            style={{
+              fontSize: 16,
+              fontWeight: '400',
+              textDecorationLine: 'underline',
+            }}>
+            Arrivals
+          </Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 }

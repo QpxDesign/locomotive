@@ -15,25 +15,37 @@ export default function Station({route, navigation}) {
     longitudeDelta: 0.004,
   });
   const [trainData, setTrainData]: any = useState([]);
-  useEffect(() => {
+  function getTrains() {
     fetch('https://amtrak-api.marcmap.app/get-trains')
       .then(r => r.json())
       .then(r2 =>
         setTrainData(
-          r2.data.filter((i: any) =>
-            i.stations.find(
-              (i2: any) =>
-                i2.code === stationData.code && i2.status === 'Enroute',
-            ),
+          r2.data.filter(
+            (i: any) =>
+              i.stations.find(
+                (i2: any) =>
+                  i2.code === stationData.code && i2.status === 'Enroute',
+              ) !== undefined &&
+              i.stations.find(
+                (i2: any) =>
+                  i2.code === stationData.code && i2.status === 'Enroute',
+              ).length !== 0,
           ),
         ),
       );
+  }
+  useEffect(() => {
+    getTrains();
+    setPosition({
+      latitude: stationData?.lat ?? 0,
+      longitude: stationData?.lon ?? 0,
+      latitudeDelta: 0.004,
+      longitudeDelta: 0.004,
+    });
   }, []);
   useEffect(() => {
     const interval = setInterval(() => {
-      fetch('https://amtrak-api.marcmap.app/get-trains')
-        .then(r => r.json())
-        .then(r2 => setTrainData(r2.data));
+      getTrains();
     }, 20_000);
 
     return () => clearInterval(interval);
@@ -79,34 +91,51 @@ export default function Station({route, navigation}) {
         </Text>
         <ScrollView>
           {trainData !== undefined ? (
-            trainData.sort().map((item: any, index: any) => {
-              return (
-                <TouchableOpacity
-                  key={index}
-                  onPress={() => {
-                    navigation2.navigate('Stops', {trainStuff: item});
-                  }}>
-                  <View
-                    style={{
-                      flexDirection: 'row',
-                      backgroundColor: index % 2 === 0 ? '#d4d4d8' : '#e5e7eb',
-                      paddingHorizontal: 20,
-                      paddingVertical: 10,
-                      borderRadius: 10,
-                      marginBottom: 5,
+            trainData
+              .sort(function (a: any, b: any) {
+                var keyA = new Date(
+                    a.stations.find(
+                      (i: any) => i.code === stationData.code,
+                    )?.schArr,
+                  ),
+                  keyB = new Date(
+                    b.stations.find(
+                      (i: any) => i.code === stationData.code,
+                    )?.schArr,
+                  );
+                if (keyA < keyB) return -1;
+                if (keyA > keyB) return 1;
+                return 0;
+              })
+              .map((item: any, index: any) => {
+                return (
+                  <TouchableOpacity
+                    key={index}
+                    onPress={() => {
+                      navigation2.navigate('Stops', {trainStuff: item});
                     }}>
-                    <Text style={{fontSize: 20}}>
-                      {item.routeName} #{item.trainNum} •{' '}
-                      {formatTime(
-                        item.stations.find(
-                          (i: any) => i.code === stationData.code,
-                        )?.schArr,
-                      )}
-                    </Text>
-                  </View>
-                </TouchableOpacity>
-              );
-            })
+                    <View
+                      style={{
+                        flexDirection: 'row',
+                        backgroundColor:
+                          index % 2 === 0 ? '#d4d4d8' : '#e5e7eb',
+                        paddingHorizontal: 20,
+                        paddingVertical: 10,
+                        borderRadius: 10,
+                        marginBottom: 5,
+                      }}>
+                      <Text style={{fontSize: 20}}>
+                        {item.routeName} #{item.trainNum} •{' '}
+                        {formatTime(
+                          item.stations.find(
+                            (i: any) => i.code === stationData.code,
+                          )?.schArr,
+                        )}
+                      </Text>
+                    </View>
+                  </TouchableOpacity>
+                );
+              })
           ) : (
             <Text style={{textAlign: 'center', fontSize: 18, color: 'white'}}>
               Loading...
