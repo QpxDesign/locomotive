@@ -9,8 +9,8 @@ export default function Station({route, navigation}) {
 
   const {stationData} = route.params;
   const [position, setPosition] = useState({
-    latitude: stationData.lat,
-    longitude: stationData.lon,
+    latitude: stationData?.lat ?? 0,
+    longitude: stationData?.lon ?? 0,
     latitudeDelta: 0.004,
     longitudeDelta: 0.004,
   });
@@ -100,7 +100,7 @@ export default function Station({route, navigation}) {
                       {formatTime(
                         item.stations.find(
                           (i: any) => i.code === stationData.code,
-                        ).schArr,
+                        )?.schArr,
                       )}
                     </Text>
                   </View>

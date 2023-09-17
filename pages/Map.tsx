@@ -4,14 +4,36 @@ import MapView, {Marker, Callout} from 'react-native-maps';
 import Geolocation from '@react-native-community/geolocation';
 import TrainPopup from '../components/TrainPopup';
 import Geojson from 'react-native-typescript-geojson';
-//const AmtrakLinesGEOJSON = require('../assets/amtrak-track.json');
+const AmtrakLinesGEOJSON = require('../assets/amtrak-track');
+const AmtrakStopsGEOJSON = require('../assets/amtrak-stations');
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import {useNavigation} from '@react-navigation/native';
+import StationPopup from '../components/StationPopup';
 
 export default function Map() {
+  function celsiusToFahrenheit(celsius: any) {
+    return Math.round((celsius * 9) / 5 + 32);
+  }
+  function getCurrentWeather(lat: any, long: any) {
+    console.log('fetched weather data');
+
+    fetch(
+      `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${long}&current_weather=true&hourly=temperature_2m,relativehumidity_2m,windspeed_10m`,
+    )
+      .then(r => r.json())
+      .then(r2 => {
+        console.log('fetched weather data');
+        if (r2 !== undefined && r2.current_weather !== undefined) {
+          setLatestWeatherData(
+            celsiusToFahrenheit(r2.current_weather.temperature),
+          );
+        }
+      });
+  }
   const navigation = useNavigation();
 
   const map = useRef();
+  const [latestWeatherData, setLatestWeatherData]: any = useState('--');
   const [position, setPosition] = useState({
     latitude: 38.9072,
     longitude: -77.0369,
@@ -96,6 +118,32 @@ export default function Map() {
         zoomEnabled={true}
         pitchEnabled={true}
         rotateEnabled={true}>
+        {AmtrakStopsGEOJSON.features.map((stop: any, index: any) => {
+          return (
+            <Marker
+              onPress={() => {
+                console.log('getting weatherdata');
+                getCurrentWeather(
+                  stop.geometry.coordinates[1],
+                  stop.geometry.coordinates[0],
+                );
+              }}
+              tappable={true}
+              key={index}
+              coordinate={{
+                latitude: stop.geometry.coordinates[1],
+                longitude: stop.geometry.coordinates[0],
+              }}
+              title={stop.properties.STNNAME}
+              image={{uri: 'MapPinIcon'}}>
+              <Callout>
+                <StationPopup
+                  stationMetadata={stop}
+                  weather={latestWeatherData}></StationPopup>
+              </Callout>
+            </Marker>
+          );
+        })}
         {trainData !== undefined && trainData.data !== undefined
           ? trainData.data.map((train: any, index: any) => {
               return Platform.OS === 'ios' ? (
@@ -128,9 +176,13 @@ export default function Map() {
               );
             })
           : ''}
+
+        <Geojson
+          geojson={AmtrakLinesGEOJSON}
+          strokeColor="black"
+          strokeWidth={3}
+        />
       </MapView>
     </>
   );
 }
-
-//<Geojson geojson={AmtrakLinesGEOJSON} />

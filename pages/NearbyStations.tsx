@@ -6,6 +6,7 @@ import {
   ScrollView,
   TouchableOpacity,
   TextInput,
+  Settings,
 } from 'react-native';
 import React, {Component, useEffect, useState} from 'react';
 import LinearGradient from 'react-native-linear-gradient';
@@ -16,10 +17,11 @@ import Geolocation from '@react-native-community/geolocation';
 import getDistanceFromLatLonInKm from '../utils/getDistanceFromLatLonInKm';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {useNavigation} from '@react-navigation/native';
+import InAppReview from 'react-native-in-app-review';
 
 export default function NearbyStations() {
-  const [userLat, setUserLat]: any = useState(0);
-  const [userLon, setUserLon]: any = useState(0);
+  const [userLat, setUserLat]: any = useState(0); //77.0365
+  const [userLon, setUserLon]: any = useState(0); //77.0365
 
   const [stations, setStations]: any = useState();
   const navigation = useNavigation();
@@ -27,26 +29,22 @@ export default function NearbyStations() {
   const [search, setSearch]: any = useState('');
 
   useEffect(() => {
+    var prevValue = Settings.get('times_opened');
+    if (prevValue === undefined || prevValue === null) {
+      prevValue = 0;
+    }
+    Settings.set({times_opened: prevValue + 1});
+    console.log(prevValue);
+    if (prevValue === 20 && InAppReview.isAvailable()) {
+      InAppReview.RequestInAppReview();
+    }
+
     Geolocation.getCurrentPosition(pos => {
       const crd = pos.coords;
       setUserLat(crd.latitude);
       setUserLon(crd.longitude);
     }),
       [];
-    /* fetch('https://amtrak-api.marcmap.app/get-stations')
-      .then(r => r.json())
-      .then(r =>
-        setStations(
-          r.data.sort(function (a: any, b: any) {
-            return (
-              getDistanceFromLatLonInKm(a.lat, a.lon, userLat, userLon) -
-              getDistanceFromLatLonInKm(b.lat, b.lon, userLat, userLon)
-            );
-          }),
-        ),
-      );*/
-  }, []);
-  useEffect(() => {
     fetch('https://amtrak-api.marcmap.app/get-stations')
       .then(r => r.json())
       .then(r =>
@@ -59,6 +57,37 @@ export default function NearbyStations() {
           }),
         ),
       );
+  }, []);
+  useEffect(() => {
+    Geolocation.getCurrentPosition(pos => {
+      const crd = pos.coords;
+
+      fetch('https://amtrak-api.marcmap.app/get-stations')
+        .then(r => r.json())
+        .then(r =>
+          setStations(
+            r.data.sort(function (a: any, b: any) {
+              return (
+                getDistanceFromLatLonInKm(
+                  a.lat,
+                  a.lon,
+                  pos.coords.latitude,
+                  pos.coords.longitude,
+                ) -
+                getDistanceFromLatLonInKm(
+                  b.lat,
+                  b.lon,
+                  pos.coords.latitude,
+                  pos.coords.longitude,
+                )
+              );
+            }),
+          ),
+        );
+      setUserLat(crd.latitude);
+      setUserLon(crd.longitude);
+    }),
+      [];
   }, [userLat, userLon]);
 
   return (
