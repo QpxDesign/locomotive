@@ -3,6 +3,7 @@ import React, {useState, useEffect} from 'react';
 import MapView, {Marker, Callout} from 'react-native-maps';
 import {formatTime} from '../utils/FormatDate';
 import {useNavigation} from '@react-navigation/native';
+import {GetTrainsResponse} from '../structs/GetTrainsResponse';
 
 export default function Station({route, navigation}) {
   const navigation2 = useNavigation();
@@ -14,7 +15,9 @@ export default function Station({route, navigation}) {
     latitudeDelta: 0.004,
     longitudeDelta: 0.004,
   });
-  const [trainData, setTrainData]: any = useState([]);
+  const [trainData, setTrainData] = useState<GetTrainsResponse | undefined>(
+    undefined,
+  );
   function getTrains() {
     fetch('https://amtrak-api.marcmap.app/get-trains')
       .then(r => r.json())

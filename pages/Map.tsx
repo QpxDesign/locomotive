@@ -9,6 +9,7 @@ const AmtrakStopsGEOJSON = require('../assets/amtrak-stations');
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import {useNavigation} from '@react-navigation/native';
 import StationPopup from '../components/StationPopup';
+import {GetTrainsResponse} from '../structs/GetTrainsResponse';
 
 export default function Map() {
   function celsiusToFahrenheit(celsius: any) {
@@ -16,7 +17,6 @@ export default function Map() {
   }
   function getCurrentWeather(lat: any, long: any) {
     console.log('fetched weather data');
-
     fetch(
       `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${long}&current_weather=true&hourly=temperature_2m,relativehumidity_2m,windspeed_10m`,
     )
@@ -40,7 +40,9 @@ export default function Map() {
     latitudeDelta: 0.05,
     longitudeDelta: 0.05,
   });
-  const [trainData, setTrainData]: any = useState({});
+  const [trainData, setTrainData] = useState<GetTrainsResponse | undefined>(
+    undefined,
+  );
   useEffect(() => {
     fetch('https://amtrak-api.marcmap.app/get-trains')
       .then(r => r.json())

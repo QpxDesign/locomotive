@@ -7,7 +7,7 @@ import {formatTime} from '../utils/FormatDate';
 
 export default function Stops({route, navigation}) {
   var {trainStuff} = route.params;
-  const [trainStuffState, setTrainStuffState]: any = useState(trainStuff);
+  const [trainStuffState, setTrainStuffState] = useState(trainStuff);
   const viewRef = useRef();
   function countDepartedStations() {
     var count = 0;
