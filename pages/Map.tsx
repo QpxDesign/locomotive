@@ -6,6 +6,8 @@ import TrainPopup from '../components/TrainPopup';
 import Geojson from 'react-native-typescript-geojson';
 const AmtrakLinesGEOJSON = require('../assets/amtrak-track');
 const AmtrakStopsGEOJSON = require('../assets/amtrak-stations');
+const AmtrakStopsAPI = require('../assets/amtrak-stations-api');
+
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import {useNavigation} from '@react-navigation/native';
 import StationPopup from '../components/StationPopup';
@@ -120,23 +122,20 @@ export default function Map() {
         zoomEnabled={true}
         pitchEnabled={true}
         rotateEnabled={true}>
-        {AmtrakStopsGEOJSON.features.map((stop: any, index: any) => {
+        {AmtrakStopsAPI.map((stop: any, index: any) => {
           return (
             <Marker
               onPress={() => {
                 console.log('getting weatherdata');
-                getCurrentWeather(
-                  stop.geometry.coordinates[1],
-                  stop.geometry.coordinates[0],
-                );
+                getCurrentWeather(stop.lat, stop.lon);
               }}
               tappable={true}
               key={index}
               coordinate={{
-                latitude: stop.geometry.coordinates[1],
-                longitude: stop.geometry.coordinates[0],
+                latitude: stop.lat,
+                longitude: stop.lon,
               }}
-              title={stop.properties.STNNAME}
+              title={stop.name}
               image={{uri: 'MapPinIcon'}}>
               <Callout>
                 <StationPopup

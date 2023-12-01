@@ -1,7 +1,7 @@
 import {View, Text, ScrollView, TouchableOpacity} from 'react-native';
 import React, {useState, useEffect} from 'react';
 import MapView, {Marker, Callout} from 'react-native-maps';
-import {formatTime} from '../utils/FormatDate';
+import {formatDate, formatTime} from '../utils/FormatDate';
 import {useNavigation} from '@react-navigation/native';
 import {GetTrainsResponse} from '../structs/GetTrainsResponse';
 
@@ -130,6 +130,12 @@ export default function Station({route, navigation}) {
                       <Text style={{fontSize: 20}}>
                         {item.routeName} #{item.trainNum} •{' '}
                         {formatTime(
+                          item.stations.find(
+                            (i: any) => i.code === stationData.code,
+                          )?.schArr,
+                        )}{' '}
+                        •{' '}
+                        {formatDate(
                           item.stations.find(
                             (i: any) => i.code === stationData.code,
                           )?.schArr,
