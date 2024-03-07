@@ -14,6 +14,7 @@
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		7699B88040F8A987B510C191 /* libPods-AmTrack-AmTrackTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 19F6CBCC0A4E27FBF8BF4A61 /* libPods-AmTrack-AmTrackTests.a */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
+		8240001F2B9933540036DD74 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8240001E2B9933540036DD74 /* StoreKit.framework */; };
 		827117D72A2A86AA00EC83F7 /* Fontisto.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 827117C72A2A86AA00EC83F7 /* Fontisto.ttf */; };
 		827117D82A2A86AA00EC83F7 /* Octicons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 827117C82A2A86AA00EC83F7 /* Octicons.ttf */; };
 		827117D92A2A86AA00EC83F7 /* Feather.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 827117C92A2A86AA00EC83F7 /* Feather.ttf */; };
@@ -58,6 +59,8 @@
 		5B7EB9410499542E8C5724F5 /* Pods-AmTrack-AmTrackTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AmTrack-AmTrackTests.debug.xcconfig"; path = "Target Support Files/Pods-AmTrack-AmTrackTests/Pods-AmTrack-AmTrackTests.debug.xcconfig"; sourceTree = "<group>"; };
 		5DCACB8F33CDC322A6C60F78 /* libPods-AmTrack.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-AmTrack.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = AmTrack/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		8240001E2B9933540036DD74 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
+		824000212B993A640036DD74 /* Products.storekit */ = {isa = PBXFileReference; lastKnownFileType = text; path = Products.storekit; sourceTree = "<group>"; };
 		827117C72A2A86AA00EC83F7 /* Fontisto.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Fontisto.ttf; sourceTree = "<group>"; };
 		827117C82A2A86AA00EC83F7 /* Octicons.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Octicons.ttf; sourceTree = "<group>"; };
 		827117C92A2A86AA00EC83F7 /* Feather.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Feather.ttf; sourceTree = "<group>"; };
@@ -92,6 +95,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				0C80B921A6F3F58F76C31292 /* libPods-AmTrack.a in Frameworks */,
+				8240001F2B9933540036DD74 /* StoreKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -132,6 +136,7 @@
 		2D16E6871FA4F8E400B85C8A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				8240001E2B9933540036DD74 /* StoreKit.framework */,
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
 				5DCACB8F33CDC322A6C60F78 /* libPods-AmTrack.a */,
 				19F6CBCC0A4E27FBF8BF4A61 /* libPods-AmTrack-AmTrackTests.a */,
@@ -172,6 +177,7 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
+				824000212B993A640036DD74 /* Products.storekit */,
 				13B07FAE1A68108700A75B9A /* AmTrack */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
 				00E356EF1AD99517003FC87E /* AmTrackTests */,
@@ -559,7 +565,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 15;
+				CURRENT_PROJECT_VERSION = 16;
 				DEVELOPMENT_TEAM = HJCD65FY5D;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = AmTrack/Info.plist;
@@ -570,7 +576,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.50;
+				MARKETING_VERSION = 1.50.1;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -596,7 +602,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				CURRENT_PROJECT_VERSION = 15;
+				CURRENT_PROJECT_VERSION = 16;
 				DEVELOPMENT_TEAM = HJCD65FY5D;
 				INFOPLIST_FILE = AmTrack/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "AmTrack: Amtrak Train Tracker";
@@ -606,7 +612,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.50;
+				MARKETING_VERSION = 1.50.1;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
