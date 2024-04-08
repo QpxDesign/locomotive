@@ -1,4 +1,4 @@
-import {Text, View, StyleSheet, Platform, TouchableOpacity} from 'react-native';
+import {Text, View, StyleSheet, Platform, TouchableOpacity, Settings} from 'react-native';
 import React, {useRef, useEffect, useState} from 'react';
 import MapView, {Marker, Callout} from 'react-native-maps';
 import Geolocation from '@react-native-community/geolocation';
@@ -46,13 +46,13 @@ export default function Map() {
     undefined,
   );
   useEffect(() => {
-    fetch('https://amtrak-api.marcmap.app/get-trains')
+    fetch(`https://amtrak-api.marcmap.app/get-trains?${Settings.get("dev_id")}`)
       .then(r => r.json())
       .then(r2 => setTrainData(r2));
   }, []);
   useEffect(() => {
     const interval = setInterval(() => {
-      fetch('https://amtrak-api.marcmap.app/get-trains')
+      fetch(`https://amtrak-api.marcmap.app/get-trains?${Settings.get("dev_id")}`)
         .then(r => r.json())
         .then(r2 => setTrainData(r2));
     }, 20_000);

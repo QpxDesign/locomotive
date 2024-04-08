@@ -1,4 +1,4 @@
-import {View, Text, ScrollView, TouchableOpacity} from 'react-native';
+import {View, Text, ScrollView, TouchableOpacity, Settings} from 'react-native';
 import React, {useState, useEffect} from 'react';
 import MapView, {Marker, Callout} from 'react-native-maps';
 import {formatDate, formatTime} from '../utils/FormatDate';
@@ -19,7 +19,7 @@ export default function Station({route, navigation}) {
     undefined,
   );
   function getTrains() {
-    fetch('https://amtrak-api.marcmap.app/get-trains')
+    fetch(`https://amtrak-api.marcmap.app/get-trains?${Settings.get("dev_id")}`)
       .then(r => r.json())
       .then(r2 =>
         setTrainData(

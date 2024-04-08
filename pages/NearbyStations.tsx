@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   TextInput,
   Settings,
+  Alert
 } from 'react-native';
 import React, {Component, useEffect, useState} from 'react';
 import LinearGradient from 'react-native-linear-gradient';
@@ -18,6 +19,9 @@ import getDistanceFromLatLonInKm from '../utils/getDistanceFromLatLonInKm';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {useNavigation} from '@react-navigation/native';
 import InAppReview from 'react-native-in-app-review';
+import StationsLocal from "../assets/stationdata.json"
+import uuid from 'react-native-uuid';
+
 
 export default function NearbyStations() {
   const [userLat, setUserLat]: any = useState(0); //77.0365
@@ -30,13 +34,25 @@ export default function NearbyStations() {
 
   useEffect(() => {
     var prevValue = Settings.get('times_opened');
+    if (Settings.get('dev_id') === undefined || Settings.get('dev_id') === null) {
+      Settings.set({"dev_id":uuid.v4()})
+    }
     if (prevValue === undefined || prevValue === null) {
       prevValue = 0;
     }
     Settings.set({times_opened: prevValue + 1});
     console.log(prevValue);
-    if (prevValue === 20 && InAppReview.isAvailable()) {
+    if (prevValue === 5 && InAppReview.isAvailable()) {
       InAppReview.RequestInAppReview();
+    }
+    if (prevValue % 10 === 0) {
+        Alert.alert(
+        "Please Consider Donating",
+        "Love AmTrack & Want to keep it free and ad-less for all? Please Donate! Any bit helps.",
+        [
+        {text:"No Thanks."},
+        {text: "Donate", onPress: () => {navigation.navigate('Info')}}
+        ])
     }
 
     Geolocation.getCurrentPosition(pos => {
@@ -45,11 +61,11 @@ export default function NearbyStations() {
       setUserLon(crd.longitude);
     }),
       [];
-    fetch('https://amtrak-api.marcmap.app/get-stations')
+    fetch(`https://amtrak-api.marcmap.app/get-stations?${Settings.get("dev_id")}`)
       .then(r => r.json())
       .then(r =>
         setStations(
-          r.data.sort(function (a: any, b: any) {
+          StationsLocal.sort(function (a: any, b: any) {
             return (
               getDistanceFromLatLonInKm(a.lat, a.lon, userLat, userLon) -
               getDistanceFromLatLonInKm(b.lat, b.lon, userLat, userLon)
@@ -62,11 +78,11 @@ export default function NearbyStations() {
     Geolocation.getCurrentPosition(pos => {
       const crd = pos.coords;
 
-      fetch('https://amtrak-api.marcmap.app/get-stations')
+      fetch(`https://amtrak-api.marcmap.app/get-stations?${Settings.get("dev_id")}`)
         .then(r => r.json())
         .then(r =>
           setStations(
-            r.data.sort(function (a: any, b: any) {
+            StationsLocal.sort(function (a: any, b: any) {
               return (
                 getDistanceFromLatLonInKm(
                   a.lat,

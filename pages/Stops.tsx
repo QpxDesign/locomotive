@@ -20,7 +20,7 @@ export default function Stops({route, navigation}) {
   }
   useEffect(() => {
     const interval = setInterval(() => {
-      fetch('https://amtrak-api.marcmap.app/get-trains')
+      fetch(`https://amtrak-api.marcmap.app/get-trains?${Settings.get("dev_id")}`)
         .then(r => r.json())
         .then(r2 => {
           if (
