@@ -5,6 +5,7 @@ import {
   ScrollView,
   StyleSheet,
   TouchableOpacity,
+  Settings
 } from 'react-native';
 import React from 'react';
 import LinearGradient from 'react-native-linear-gradient';
@@ -60,7 +61,7 @@ export default function Info() {
             <Text
               style={styles.linkText}
               onPress={() => {
-                Linking.openURL('https://quinnpatwardhan.com');
+                Linking.openURL(`https://quinnpatwardhan.com?${Settings.get("dev_id")}`);
               }}>
               quinnpatwardhan.com
             </Text>
@@ -73,7 +74,7 @@ export default function Info() {
             <Text
               style={styles.linkText}
               onPress={() => {
-                Linking.openURL('https://marcmap.app/privacy');
+                Linking.openURL(`https://marcmap.app/privacy?${Settings.get("dev_id")}`);
               }}>
               Privacy Policy
             </Text>{' '}

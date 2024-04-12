@@ -1,4 +1,4 @@
-import {Text, View, ScrollView, Platform} from 'react-native';
+import {Text, View, ScrollView, Platform, Settings} from 'react-native';
 import React, {useState, useRef, useEffect} from 'react';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {NavigationContainer} from '@react-navigation/native';
