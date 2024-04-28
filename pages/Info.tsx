@@ -18,7 +18,7 @@ import {
 
 export default function Info() {
   const productIds = {skus: ['donation4', 'donation5', 'donation6']};
-  purchase = async (sku: string) => {
+  let purchase = async (sku: string) => {
     try {
       await requestPurchase({
         sku,

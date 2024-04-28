@@ -9,7 +9,7 @@ import {
   Settings,
   Alert
 } from 'react-native';
-import React, {Component, useEffect, useState} from 'react';
+import React, {Component, useEffect, useState, useCallback} from 'react';
 import LinearGradient from 'react-native-linear-gradient';
 import FooterNav from '../components/FooterNav';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
@@ -21,7 +21,7 @@ import {useNavigation} from '@react-navigation/native';
 import InAppReview from 'react-native-in-app-review';
 import StationsLocal from "../assets/stationdata.json"
 import uuid from 'react-native-uuid';
-
+import { getPurchaseHistory } from "react-native-iap"
 
 export default function NearbyStations() {
   const [userLat, setUserLat]: any = useState(0); //77.0365
@@ -31,7 +31,25 @@ export default function NearbyStations() {
   const navigation = useNavigation();
 
   const [search, setSearch]: any = useState('');
-
+  async function userHasDonated(): Promise<Boolean> {
+    return new Promise((resolve) => {
+    getPurchaseHistory([
+       'donation4',
+       'donation5',
+       'donation6'
+     ]).then((a) => {
+       if (a.length === 0) {
+         return resolve(false);
+       } else {
+         return resolve(true)
+       }
+       }).catch((e) =>
+       {
+         return resolve(false)
+         }
+       )
+    })
+  }
   useEffect(() => {
     var prevValue = Settings.get('times_opened');
     if (Settings.get('dev_id') === undefined || Settings.get('dev_id') === null) {
@@ -45,7 +63,10 @@ export default function NearbyStations() {
     if (prevValue === 5 && InAppReview.isAvailable()) {
       InAppReview.RequestInAppReview();
     }
+
     if (prevValue % 10 === 0) {
+      userHasDonated().then((r) => {
+        if (r === false) {
         Alert.alert(
         "Please Consider Donating",
         "Love AmTrack & Want to keep it free and ad-less for all? Please Donate! Any bit helps.",
@@ -53,6 +74,9 @@ export default function NearbyStations() {
         {text:"No Thanks."},
         {text: "Donate", onPress: () => {navigation.navigate('Info')}}
         ])
+        }
+        })
+
     }
 
     Geolocation.getCurrentPosition(pos => {
