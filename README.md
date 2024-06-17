@@ -1,6 +1,6 @@
 ## Locomotive: Open Source Native Mobile Amtrak Tracker
 
-### 2,000+ Downloads on Apple App Store & Dozens of Daily Users
+### 20,000+ Downloads on Apple App Store & 30,000+ of Monthly Users
 
 ### About
 
