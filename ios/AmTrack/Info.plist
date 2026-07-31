@@ -39,6 +39,8 @@
 	<string>We need your location to show you nearby stations and trains.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>We need your location to show you nearby stations and trains.</string>
+	<key>RCTNewArchEnabled</key>
+	<true/>
 	<key>UIAppFonts</key>
 	<array>
 		<string>AntDesign.ttf</string>
